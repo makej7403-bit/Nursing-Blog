@@ -10,12 +10,10 @@ export default function SignupPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
 
     try {
@@ -24,37 +22,31 @@ export default function SignupPage() {
     } catch (err) {
       setError(err.message);
     }
-
-    setLoading(false);
   };
 
   return (
-    <div className="auth-container">
+    <div>
       <h1>Create Account</h1>
 
       <form onSubmit={handleSignup}>
         <input
           type="email"
-          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
+          placeholder="Email"
         />
 
         <input
           type="password"
-          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
+          placeholder="Password"
         />
 
-        {error && <p className="error">{error}</p>}
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Creating..." : "Sign Up"}
-        </button>
+        <button type="submit">Sign Up</button>
       </form>
+
+      {error && <p>{error}</p>}
     </div>
   );
 }
