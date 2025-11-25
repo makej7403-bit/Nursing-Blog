@@ -4,9 +4,9 @@ export const dynamic = "force-dynamic";
 export const runtime = "edge";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -20,20 +20,33 @@ export default function LoginPage() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push("/upload");
+      router.push("/library");
     } catch (err) {
       setError(err.message);
     }
   };
 
   return (
-    <div>
+    <div className="auth-container">
       <h1>Login</h1>
 
       <form onSubmit={handleLogin}>
-        <input value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input value={password} onChange={(e) => setPassword(e.target.value)} />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
         <button type="submit">Login</button>
+
         {error && <p>{error}</p>}
       </form>
     </div>
