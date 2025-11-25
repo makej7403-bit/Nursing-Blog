@@ -10,51 +10,43 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push("/library"); // Redirect after login
+      router.push("/library");
     } catch (err) {
       setError(err.message);
     }
-
-    setLoading(false);
   };
 
   return (
-    <div className="auth-container">
+    <div>
       <h1>Login</h1>
 
       <form onSubmit={handleLogin}>
         <input
           type="email"
-          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
+          placeholder="Email"
         />
 
         <input
           type="password"
-          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
+          placeholder="Password"
         />
 
-        {error && <p className="error">{error}</p>}
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </button>
+        <button type="submit">Login</button>
       </form>
+
+      {error && <p>{error}</p>}
     </div>
   );
 }
