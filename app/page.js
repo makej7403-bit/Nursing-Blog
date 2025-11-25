@@ -1,8 +1,10 @@
+"use client";
+
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
 
-import HomeContent from "@/components/HomeContent";
+import FileList from "@/components/FileList";
 
-export default function Home() {
-  return <HomeContent />;
+export default function HomePage() {
+  return <FileList />;
 }
