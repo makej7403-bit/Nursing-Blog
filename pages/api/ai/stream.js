@@ -42,7 +42,7 @@ export default async function handler(req, res) {
       buffer = lines.pop(); // keep partial
       for (const line of lines) {
         const txt = line.trim().startsWith("data:") ? line.trim().slice(5).trim() : line.trim();
-        if (txt === "[DONE]") continue;
+        if (!txt || txt === "[DONE]") continue;
         const delta = extractTextFromData(txt);
         if (delta) res.write(`data: ${JSON.stringify({ delta })}\n\n`);
       }
