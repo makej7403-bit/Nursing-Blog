@@ -1,5 +1,5 @@
 // pages/api/ocr/vision.js
-import { getAdminStorage } from "../../../lib/firebaseAdmin.js";
+import { getAdminStorage } from "../../lib/firebaseAdmin.js";
 import fs from "fs";
 import os from "os";
 import path from "path";
@@ -26,11 +26,14 @@ export default async function handler(req, res) {
     if (VISION_KEY) {
       const contentBase64 = buffer.toString("base64");
       const visionReq = { requests: [{ image: { content: contentBase64 }, features: [{ type: "DOCUMENT_TEXT_DETECTION" }] }] };
-      const visionRes = await fetch(`https://vision.googleapis.com/v1/images:annotate?key=${VISION_KEY}`, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(visionReq) });
+      const visionRes = await fetch(`https://vision.googleapis.com/v1/images:annotate?key=${VISION_KEY}`, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(visionReq)
+      });
       const data = await visionRes.json();
       return res.status(200).json({ ocr: data });
     } else {
-      // Tesseract fallback (server must have tesseract)
       const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "ocr-"));
       const imgPath = path.join(tmp, "input");
       fs.writeFileSync(imgPath, buffer);
