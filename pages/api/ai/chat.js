@@ -1,5 +1,5 @@
 // pages/api/ai/chat.js
-import { estimateCost } from "../../../lib/aiCost.js";
+import { estimateCost } from "../../lib/aiCost.js";
 const OPENAI_KEY = process.env.OPENAI_API_KEY;
 
 export default async function handler(req, res) {
@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     const body = {
       model,
       messages: [
-        { role: "system", content: "You are a concise nursing education assistant." },
+        { role: "system", content: "You are a concise nursing education assistant. Answer clearly and cite sources when applicable." },
         { role: "user", content: message }
       ],
       temperature: 0.2,
@@ -32,12 +32,15 @@ export default async function handler(req, res) {
     const usage = data.usage || null;
     const costInfo = usage ? estimateCost(usage, model) : null;
 
-    // best-effort log (optional)
+    // Best-effort log to Firestore (if admin SDK configured)
     try {
-      const { getAdminFirestore } = await import("../../../lib/firebaseAdmin.js");
+      const { getAdminFirestore } = await import("../../lib/firebaseAdmin.js");
       const db = getAdminFirestore();
       await db.collection("ai_usage").add({ type: "chat", prompt: message.slice(0,1000), replySnippet: reply.slice(0,1000), usage, costInfo, model, createdAt: new Date() });
-    } catch (e) { console.warn("ai usage log failed", e.message); }
+    } catch (e) {
+      // ignore logging errors
+      console.warn("ai usage log failed", e?.message ?? e);
+    }
 
     return res.status(200).json({ reply, usage, costInfo });
   } catch (err) {
