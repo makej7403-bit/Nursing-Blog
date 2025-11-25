@@ -1,0 +1,13 @@
+# Nursing Hub — Deploy notes
+
+1. Copy files to repo.
+2. Create .env.local with:
+   - NEXT_PUBLIC_FIREBASE_API_KEY, NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN, NEXT_PUBLIC_FIREBASE_PROJECT_ID, NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET, NEXT_PUBLIC_FIREBASE_APP_ID, NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
+   - OPENAI_API_KEY
+   - FIREBASE_SERVICE_ACCOUNT (full JSON string)
+   - VISION_API_KEY (optional)
+   - MODEL_PRICING (optional JSON)
+   - NEXT_PUBLIC_ADMIN_EMAIL / NEXT_PUBLIC_ADMIN_UID
+3. npm install
+4. npm run dev
+5. Push to GitHub and deploy on Vercel. Add env vars to Vercel
