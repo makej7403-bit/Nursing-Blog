@@ -1,17 +1,16 @@
-// app/layout.js
 import "./globals.css";
+import LayoutWrapper from "@/components/LayoutWrapper";
 
 export const metadata = {
   title: "Nursing Blog",
-  description: "A simple nursing library blog",
+  description: "A simple nursing resource blog",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head />
       <body suppressHydrationWarning={true}>
-        {children}
+        <LayoutWrapper>{children}</LayoutWrapper>
       </body>
     </html>
   );
