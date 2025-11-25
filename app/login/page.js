@@ -1,41 +1,60 @@
 "use client";
+
 import { useState } from "react";
-import { auth } from '@/firebase/config';
+import { auth } from "@/lib/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-export default function Login() {
+import { useRouter } from "next/navigation";
+
+export default function LoginPage() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const login = async () => {
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      alert("Logged in!");
-    } catch (e) {
-      alert(e.message);
+      router.push("/library"); // Redirect after login
+    } catch (err) {
+      setError(err.message);
     }
+
+    setLoading(false);
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-bold">Login</h2>
+    <div className="auth-container">
+      <h1>Login</h1>
 
-      <input className="border p-2 mt-3 w-full"
-        placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <form onSubmit={handleLogin}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-      <input className="border p-2 mt-3 w-full"
-        placeholder="Password"
-        type="password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
-      <button
-        onClick={login}
-        className="mt-4 p-2 bg-blue-600 text-white rounded"
-      >
-        Login
-      </button>
+        {error && <p className="error">{error}</p>}
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Logging in..." : "Login"}
+        </button>
+      </form>
     </div>
   );
 }
