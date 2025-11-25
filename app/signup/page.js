@@ -1,42 +1,60 @@
 "use client";
-import { useState } from "react";
-import { auth } from "@/firebase/config";
-import { createUserWithEmailAndPassword } from "firebase/auth";
 
-export default function SignUp() {
+import { useState } from "react";
+import { auth } from "@/lib/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from "next/navigation";
+
+export default function SignupPage() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const signup = async () => {
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      alert("Account created!");
-    } catch (e) {
-      alert(e.message);
+      router.push("/login");
+    } catch (err) {
+      setError(err.message);
     }
+
+    setLoading(false);
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-xl font-bold">Create an Account</h2>
+    <div className="auth-container">
+      <h1>Create Account</h1>
 
-      <input className="border p-2 mt-3 w-full"
-        placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <form onSubmit={handleSignup}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
 
-      <input className="border p-2 mt-3 w-full"
-        placeholder="Password"
-        type="password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
-      <button
-        onClick={signup}
-        className="mt-4 p-2 bg-blue-600 text-white rounded"
-      >
-        Sign Up
-      </button>
+        {error && <p className="error">{error}</p>}
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Creating..." : "Sign Up"}
+        </button>
+      </form>
     </div>
   );
 }
