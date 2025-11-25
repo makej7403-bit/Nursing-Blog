@@ -1,20 +1,34 @@
 // app/layout.js
 import "./globals.css";
-import Nav from "../components/Nav";
-import Footer from "../components/Footer";
 
 export const metadata = {
   title: "Nursing Hub",
-  description: "Nursing courses, notes, uploads & AI tools."
+  description: "A simple nursing resources app",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Nav />
-        <main className="max-w-4xl mx-auto">{children}</main>
-        <Footer />
+
+        {/* TEMP ERROR DEBUGGER – WILL SHOW ANY FRONTEND ERROR */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.onerror = function(message, source, line, column, error) {
+                document.body.innerHTML =
+                  "<div style='padding:20px;font-family:Arial;color:red;'>" +
+                  "<h2>⚠ JavaScript Error Detected</h2>" +
+                  "<p><strong>Message:</strong> " + message + "</p>" +
+                  "<p><strong>Source:</strong> " + source + "</p>" +
+                  "<p><strong>Line:</strong> " + line + ":" + column + "</p>" +
+                  "</div>";
+              };
+            `,
+          }}
+        />
+
+        {children}
       </body>
     </html>
   );
