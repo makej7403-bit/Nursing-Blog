@@ -1,9 +1,12 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
+
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -24,13 +27,26 @@ export default function SignupPage() {
   };
 
   return (
-    <div>
+    <div className="auth-container">
       <h1>Create Account</h1>
 
       <form onSubmit={handleSignup}>
-        <input type="email" value={email} onChange={e => setEmail(e.target.value)} />
-        <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
         <button type="submit">Sign Up</button>
+
         {error && <p>{error}</p>}
       </form>
     </div>
