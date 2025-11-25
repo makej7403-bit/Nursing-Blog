@@ -1,7 +1,7 @@
 // pages/api/ai/summarize.js
-import { getAdminStorage, getAdminFirestore } from "../../../lib/firebaseAdmin.js";
+import { getAdminStorage, getAdminFirestore } from "../../lib/firebaseAdmin.js";
 import pdf from "pdf-parse";
-import { estimateCost } from "../../../lib/aiCost.js";
+import { estimateCost } from "../../lib/aiCost.js";
 const OPENAI_KEY = process.env.OPENAI_API_KEY;
 
 async function callOpenAI(prompt, max_tokens=800, model="gpt-4o-mini") {
@@ -41,7 +41,15 @@ export default async function handler(req, res) {
     if (!text || text.trim().length < 20) return res.status(400).json({ error: "No extractable text. Use OCR." });
 
     const truncated = text.length > 24000 ? text.slice(0,24000) : text;
-    const prompt = `Summarize the following nursing document into: 1) 6–10 bullet point key facts or steps 2) 3 practical clinical tips 3) 1 short study checklist. Document:\n\n${truncated}`;
+    const prompt = `Summarize the following nursing document into:
+1) 6–10 bullet point key facts or steps
+2) 3 practical clinical tips
+3) 1 short study checklist
+
+Document:
+${truncated}
+
+If the document is longer, mention that the summary is partial.`;
 
     const data = await callOpenAI(prompt);
     const reply = data.choices?.[0]?.message?.content || "";
