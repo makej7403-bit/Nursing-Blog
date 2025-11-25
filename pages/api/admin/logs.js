@@ -1,5 +1,5 @@
 // pages/api/admin/logs.js
-import { getAdminFirestore } from "../../../lib/firebaseAdmin.js";
+import { getAdminFirestore } from "../../lib/firebaseAdmin.js";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") return res.status(405).json({ error: "Method not allowed" });
